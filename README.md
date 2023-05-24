@@ -28,4 +28,9 @@ conda activate my-refrigerator
 
 [after]
 pip install opencv-python
+pip install matplotlib
+conda install -c conda-forge tesseract
+conda install tesseract-ocr
+conda install libtesseract-dev
+pip install pytesseract
 ```
