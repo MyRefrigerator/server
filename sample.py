@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import pytesseract
 
+
 # 이미지 파일 불러오기
 image_file = 'sample.jpg'
 image = cv2.imread(image_file)
@@ -22,11 +23,9 @@ center = (w // 2, h // 2)
 M = cv2.getRotationMatrix2D(center, angle, 1.0)
 image = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
 
-print(pytesseract.get_languages())
+# TesseractOCR 설정
+config = '--psm 11'
 
-# # TesseractOCR 설정
-# config = '--psm 11'
-# path = 'C:/Users/USER/anaconda3/envs/my-refrigerator/Library/bin/tesseract.exe'
-
-# # 이미지에서 텍스트 추출
-# text = pytesseract.image_to_string(image, config=config)
+# 이미지에서 텍스트 추출
+text = pytesseract.image_to_string(image, lang='kor')
+print(text)
