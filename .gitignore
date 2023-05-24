@@ -1,6 +1,6 @@
 id_rsa
 id_rsa.pub
 
-# Tesseract Files
+# Tesseract
 *.html
 out.*
