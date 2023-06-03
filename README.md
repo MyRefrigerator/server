@@ -17,6 +17,14 @@
 - [[Anaconda] 아나콘다 환경 export, import, clone 하기](https://jh-bk.tistory.com/35)
 </details>
 
+### Configs
+
+다음과 같은 
+```yaml
+path: "/home/ubuntu/server"
+```
+
+
 <br>
 
 ### History

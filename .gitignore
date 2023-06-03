@@ -1,6 +1,14 @@
 id_rsa
 id_rsa.pub
 
+# Python
+__pycache__
+
 # Tesseract
 *.html
 out.*
+
+# Configuration
+config.json
+config.yaml
+config.yml
