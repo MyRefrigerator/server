@@ -29,7 +29,11 @@ def nomalize_img(gray_img: np.ndarray) -> np.ndarray:
 
     return binary_img
 
-def draw_rectangle(img_ndarray: np.ndarray, boundary: list):
+def draw_rectangle(
+    img_ndarray: np.ndarray,
+    boundary: list,
+    color = (0, 255, 0)
+):
     
     boundary_len = len(boundary)
     is_valid_boundary = boundary_len == 4
@@ -37,10 +41,8 @@ def draw_rectangle(img_ndarray: np.ndarray, boundary: list):
         
         start_point = (boundary[0], boundary[1])
         end_point = (boundary[0] + boundary[2], boundary[1] + boundary[3])
-        
-        print(len(img_ndarray), len(img_ndarray[0]), start_point, end_point)
-        
-        cv2.rectangle(img_ndarray, start_point, end_point, (0, 255, 0), 2)
+                
+        cv2.rectangle(img_ndarray, start_point, end_point, color, 2)
         
         return img_ndarray
     else:
