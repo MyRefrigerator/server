@@ -1,6 +1,13 @@
 id_rsa
 id_rsa.pub
 
+# Outputs
+
+*_output_*.png
+*_output*.png
+*_output_*.jpg
+*_output*.jpg
+
 # Python
 __pycache__
 

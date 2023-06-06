@@ -147,7 +147,7 @@ if __name__ == "__main__":
     base_path = config['path']
     target_path = 'sample'
     
-    load_path = f'{base_path}/assets/receipt/{target_path}.png'
+    load_path = f'{base_path}/assets/receipt/sample/{target_path}.png'
     receiptDetector = ReceiptDetector()
     
     receipt_img = receiptDetector.load_img(load_path)
@@ -171,10 +171,10 @@ if __name__ == "__main__":
         receiptDetector.draw_rectangle(receipt_boxed_img, [int(l) for l in lines[6:10]], color)
     
     # # [OUTPUT]
-    save_path = f'{base_path}/assets/receipt/{target_path}_oirigin.png'
+    save_path = f'{base_path}/assets/receipt/sample/{target_path}_oirigin.png'
     is_saved = receiptDetector.save_img(receipt_normalized_img, save_path)
     print(is_saved)
     
-    save_path = f'{base_path}/assets/receipt/{target_path}_drawed_9999.png'
+    save_path = f'{base_path}/assets/receipt/sample/{target_path}_drawed_9999.png'
     is_saved = receiptDetector.save_img(receipt_boxed_img, save_path)
     print(is_saved)
