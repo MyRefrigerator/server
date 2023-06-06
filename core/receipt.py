@@ -8,13 +8,30 @@ pytesseract.pytesseract.tesseract_cmd = r"/usr/bin/tesseract"
 
 class Receipt():
     
-    def __init__(self):
-        print('OcrReceipt is generated')
+    def __init__(self, receipt_img: np.ndarray):
+        print('Receipt is generated')
         
         self.bodyKeys = []
         self.body = {}
         self.originLines = np.zeros((0, 12), dtype=int)
         self.convertedLines = None
+        
+        document = pytesseract.image_to_data(receipt_img, lang='kor', output_type=pytesseract.Output.STRING)
+        document_lines = document.splitlines()[1:-1]
+        
+        for document_line in document_lines:
+            document_line_parts = document_line.split('\t')
+            
+            if document_line_parts[11] != '':
+                height = int(document_line_parts[9])
+                min_height = 10
+                max_height = 40
+                
+                is_valid_height = height > min_height and height < max_height
+                
+                if is_valid_height:    
+                    self.add_line(document_line_parts)
+
         
     # arr = np.array([[1,2,3,4]])
     # arr = np.append(arr, [[4,5,6,7]], axis=0)
@@ -118,30 +135,6 @@ class Receipt():
             
         return receipt_content
 
-def get_receipt_object(normalized_img) -> Receipt:
-    
-    document = pytesseract.image_to_data(normalized_img, lang='kor', output_type=pytesseract.Output.STRING)
-    document_lines = document.splitlines()[1:-1]
-    
-    receipt = Receipt()
-    for document_line in document_lines:
-        document_line_parts = document_line.split('\t')
-        
-        if document_line_parts[11] != '':
-            height = int(document_line_parts[9])
-            min_height = 10
-            max_height = 40
-            
-            is_valid_height = height > min_height and height < max_height
-            
-            if is_valid_height:    
-                receipt.add_line(document_line_parts)
-    
-    # for b in receipt.body:
-    #     print(b, ' : ', receipt.body[b])
-    
-    return receipt
-        
 if __name__ == "__main__":
     from sys import argv
     from config import get_config
@@ -162,8 +155,7 @@ if __name__ == "__main__":
     receipt_normalized_img = receiptDetector.nomalize_img(receipt_gray_img)
     receipt_boxed_img = receipt_normalized_img.copy()
     
-    # get_ImageBoxes(normalized_img)
-    ReceiptObject = get_receipt_object(receipt_normalized_img)
+    ReceiptObject = Receipt(receipt_normalized_img)
     ReceiptObject.classify_line()
     receipt = ReceiptObject.get_receipt()
     receipt2 = ReceiptObject.get_receipt_without_line()
