@@ -13,7 +13,6 @@ class ReceiptDetector():
 
     def resize_img(self, target_img: np.ndarray) -> np.ndarray:
         return imutils.resize(target_img, width=len(target_img[0]))
-
         
     def convert_gray_img(salf, color_img: np.ndarray) -> np.ndarray:
         return cv2.cvtColor(color_img, cv2.COLOR_BGR2GRAY)
@@ -48,7 +47,7 @@ class ReceiptDetector():
 
     def find_receipt_area_points(salf, gray_img: np.ndarray) -> np.ndarray:
         
-        cnts = cv2.findContours(receipt_imutils_edged_image.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        cnts = cv2.findContours(gray_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         cnts = imutils.grab_contours(cnts)
         cnts = sorted(cnts, key=cv2.contourArea, reverse=True)
         

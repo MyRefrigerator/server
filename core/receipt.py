@@ -43,12 +43,12 @@ class Receipt():
     def classify_line(self):
         # [STEP 1] 박스들의 높이 평균값 계산
         height_nparr = self.originLines[:, 9]
-        mean_height = np.nanmean(height_nparr.astype(np.int), axis=0)
+        mean_height = np.nanmean(height_nparr.astype(np.float64), axis=0)
 
         # [STEP 2] 개별 박스들의 중앙값 계산 (top + height / 2)
         boundary = self.originLines[:, [7, 9]]
         
-        median_of_boundary = boundary.astype(np.int)[:, 0] + boundary.astype(np.int)[:, 1] / 2
+        median_of_boundary = boundary.astype(np.float64)[:, 0] + boundary.astype(np.float64)[:, 1] / 2
         median_of_boundary = median_of_boundary.reshape(-1, 1)
         
         # [STEP 3] 개별 박스들의 그룹화
@@ -145,36 +145,48 @@ if __name__ == "__main__":
     config = get_config()
 
     base_path = config['path']
-    target_path = 'sample'
+    target_path = 'full_sample_3'
     
     load_path = f'{base_path}/assets/receipt/sample/{target_path}.png'
     receiptDetector = ReceiptDetector()
     
-    receipt_img = receiptDetector.load_img(load_path)
-    receipt_gray_img = receiptDetector.convert_gray_img(receipt_img)
-    receipt_normalized_img = receiptDetector.nomalize_img(receipt_gray_img)
-    receipt_boxed_img = receipt_normalized_img.copy()
+    origin_img = receiptDetector.load_img(load_path)
     
-    ReceiptObject = Receipt(receipt_normalized_img)
+    receipt_img= receiptDetector.resize_img(origin_img.copy())
+    receipt_gray_img = receiptDetector.convert_gray_img(receipt_img)
+    # receipt_blur_img = receiptDetector.convert_clean_img(receipt_gray_img)
+    receipt_edge_img = receiptDetector.convert_edged_img(receipt_gray_img)
+    
+    receipt_area_point = receiptDetector.find_receipt_area_points(receipt_edge_img.copy())
+    if receipt_area_point is None:
+        raise Exception(("Could not find receipt outline. "
+            "Try debugging your edge detection and contour steps."))
+    
+    receipt_img = receiptDetector.convert_receipt_img(origin_img, receipt_img, receipt_area_point)
+    receipt_img = receiptDetector.nomalize_img(receipt_img)
+    
+    ReceiptObject = Receipt(receipt_img)
     ReceiptObject.classify_line()
     receipt = ReceiptObject.get_receipt()
-    receipt2 = ReceiptObject.get_receipt_without_line()
+    print(receipt)
     
-    # [DRAWING]
-    count = 0
-    single_color = 50
-    for lines in ReceiptObject.convertedLines:
-        # print([int(l) for l in lines[6:10]], lines[11])
-        # [MAIN]
-        color = (0, single_color, 0)
-        single_color = min(single_color + 1, 255)
-        receiptDetector.draw_rectangle(receipt_boxed_img, [int(l) for l in lines[6:10]], color)
+    # receipt2 = ReceiptObject.get_receipt_without_line()
     
-    # # [OUTPUT]
+    # # [DRAWING]
+    # count = 0
+    # single_color = 50
+    # for lines in ReceiptObject.convertedLines:
+    #     # print([int(l) for l in lines[6:10]], lines[11])
+    #     # [MAIN]
+    #     color = (0, single_color, 0)
+    #     single_color = min(single_color + 1, 255)
+    #     receiptDetector.draw_rectangle(receipt_boxed_img, [int(l) for l in lines[6:10]], color)
+    
+    # # # [OUTPUT]
     save_path = f'{base_path}/assets/receipt/sample/{target_path}_oirigin.png'
-    is_saved = receiptDetector.save_img(receipt_normalized_img, save_path)
+    is_saved = receiptDetector.save_img(origin_img, save_path)
     print(is_saved)
     
     save_path = f'{base_path}/assets/receipt/sample/{target_path}_drawed_9999.png'
-    is_saved = receiptDetector.save_img(receipt_boxed_img, save_path)
+    is_saved = receiptDetector.save_img(receipt_img, save_path)
     print(is_saved)
