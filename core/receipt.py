@@ -1,4 +1,4 @@
-from detect import load_img, convert_gray_img, nomalize_img, draw_rectangle, save_img
+from detect import ReceiptDetector
 from typing import List
 
 import numpy as np
@@ -155,14 +155,15 @@ if __name__ == "__main__":
     target_path = 'sample'
     
     load_path = f'{base_path}/assets/receipt/{target_path}.png'
-    img = load_img(load_path)
+    receiptDetector = ReceiptDetector()
     
-    gray_img = convert_gray_img(img)
-    normalized_img = nomalize_img(gray_img)
-    boxed_img = normalized_img.copy()
+    receipt_img = receiptDetector.load_img(load_path)
+    receipt_gray_img = receiptDetector.convert_gray_img(receipt_img)
+    receipt_normalized_img = receiptDetector.nomalize_img(receipt_gray_img)
+    receipt_boxed_img = receipt_normalized_img.copy()
     
     # get_ImageBoxes(normalized_img)
-    ReceiptObject = get_receipt_object(normalized_img)
+    ReceiptObject = get_receipt_object(receipt_normalized_img)
     ReceiptObject.classify_line()
     receipt = ReceiptObject.get_receipt()
     receipt2 = ReceiptObject.get_receipt_without_line()
@@ -175,13 +176,13 @@ if __name__ == "__main__":
         # [MAIN]
         color = (0, single_color, 0)
         single_color = min(single_color + 1, 255)
-        draw_rectangle(boxed_img, [int(l) for l in lines[6:10]], color)
+        receiptDetector.draw_rectangle(receipt_boxed_img, [int(l) for l in lines[6:10]], color)
     
     # # [OUTPUT]
     save_path = f'{base_path}/assets/receipt/{target_path}_oirigin.png'
-    is_saved = save_img(normalized_img, save_path)
+    is_saved = receiptDetector.save_img(receipt_normalized_img, save_path)
     print(is_saved)
     
     save_path = f'{base_path}/assets/receipt/{target_path}_drawed_9999.png'
-    is_saved = save_img(boxed_img, save_path)
+    is_saved = receiptDetector.save_img(receipt_boxed_img, save_path)
     print(is_saved)
