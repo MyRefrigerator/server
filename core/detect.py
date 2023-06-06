@@ -23,7 +23,7 @@ class ReceiptDetector():
     def convert_edged_img(self, target_img: np.ndarray) -> np.ndarray:
         return cv2.Canny(target_img, 75, 200)
     
-    def nomalize_img(salf, gray_img: np.ndarray) -> np.ndarray:
+    def convert_nomalize_img(salf, gray_img: np.ndarray) -> np.ndarray:
         # 픽셀 값 추출
         pixels = gray_img.flatten()
 
@@ -130,7 +130,7 @@ if __name__ == "__main__":
         img = receiptDetector.load_img(load_path)
         
         gray_img = receiptDetector.convert_gray_img(img)
-        normalized_img = receiptDetector.nomalize_img(gray_img)
+        normalized_img = receiptDetector.convert_nomalize_img(gray_img)
         
         save_path = f'{base_path}/assets/receipt/sample/{target_path}_output.png'
         is_saved = receiptDetector.save_img(normalized_img, save_path)

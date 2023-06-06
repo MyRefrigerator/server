@@ -163,7 +163,7 @@ if __name__ == "__main__":
             "Try debugging your edge detection and contour steps."))
     
     receipt_img = receiptDetector.convert_receipt_img(origin_img, receipt_img, receipt_area_point)
-    receipt_img = receiptDetector.nomalize_img(receipt_img)
+    receipt_img = receiptDetector.convert_nomalize_img(receipt_img)
     
     ReceiptObject = Receipt(receipt_img)
     ReceiptObject.classify_line()
