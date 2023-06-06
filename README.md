@@ -41,6 +41,10 @@ conda install -c conda-forge tesseract
 conda install tesseract-ocr
 conda install libtesseract-dev
 pip install pytesseract
+
+pip install imutils
+pip install scipy
+pip install orig
 ```
 
 ## Get Started(Ubuntu Only)
