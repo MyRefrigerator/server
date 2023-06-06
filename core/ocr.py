@@ -22,6 +22,101 @@ class Receipt():
     # arr = np.append(arr, [[4,5,6,7]], axis=0)
     def add_line(self, line: list):
         self.originLines = np.append(self.originLines, [line], axis=0)
+    
+    def classify_line(self):
+        # [STEP 1] 박스들의 높이 평균값 계산
+        height_nparr = self.originLines[:, 9]
+        mean_height = np.nanmean(height_nparr.astype(np.int), axis=0)
+
+        # [STEP 2] 개별 박스들의 중앙값 계산 (top + height / 2)
+        boundary = self.originLines[:, [7, 9]]
+        
+        median_of_boundary = boundary.astype(np.int)[:, 0] + boundary.astype(np.int)[:, 1] / 2
+        median_of_boundary = median_of_boundary.reshape(-1, 1)
+        
+        # [STEP 3] 개별 박스들의 그룹화
+        prev_median = 0
+        min_median, max_median = 999999999, 0
+        group_index = 0
+        
+        len_originLines = int(self.originLines.size / self.originLines[0].size)
+        group_index_np = np.zeros((int(len_originLines), 1), dtype=int)
+        for idx in range(len_originLines):
+            median: int = median_of_boundary[idx][0]
+            text = self.originLines[idx][11]
+            
+            median_gap = abs(median - prev_median)
+            # print('prev : ', prev_median, '/ median : ', median, '/ text : ', text)
+            prev_median = median 
+            min_median = 0
+            
+            is_diff_group = median_gap > mean_height
+            if is_diff_group:
+                group_index = group_index + 1
+                group_index_np[idx] = group_index
+                
+                min_median, max_median = median, median
+            else:
+                group_index_np[idx] = group_index
+                
+                is_min_median = median < min_median
+                is_max_median = median > max_median
+                
+                median_case = 'min_value' if is_min_median else 'max_value' if is_max_median == True else 'none'
+                
+                print(median_case, min_median, median, max_median)
+                if median_case == 'min_value':
+                    total_group_indexes = np.where(group_index_np == group_index)[0]
+                    total_group = median_of_boundary[total_group_indexes]
+                    
+                    target_group = total_group[total_group[:, 0] < median + median_gap]
+                    target_group = target_group.flatten()
+                    
+                    # print('👿 경고 👿 예외 케이스 처리 발견시 처리 필요함')
+                    
+                    min_median = median
+                    
+                elif median_case == 'max_value':
+                    total_group_indexes = np.where(group_index_np == group_index)[0]
+                    total_group = median_of_boundary[total_group_indexes]
+                    
+                    target_group = total_group[total_group[:, 0] > median + median_gap]
+                    target_group = target_group.flatten()
+                    
+                    # print('👿 경고 👿 예외 케이스 처리 발견시 처리 필요함')
+                    
+                    max_median = median
+                
+        self.convertedLines = np.concatenate((self.originLines, group_index_np), axis=1)
+
+    def get_receipt(self):
+        
+        receipt_content = '' # 유효성 검사된 문자열
+
+        prev_group = 0
+
+        for lines in self.convertedLines:
+            text = lines[11]
+            now_group = lines[12]
+            if prev_group != now_group:
+                receipt_content = receipt_content + '\n' + text
+                
+            else:
+                receipt_content = receipt_content + text
+            
+            prev_group = now_group
+            
+        return receipt_content
+    
+    def get_receipt_without_line(self):
+        
+        receipt_content = '' # 그냥 원본 문자열
+            
+        for lines in self.originLines:
+            text = lines[11]
+            receipt_content = receipt_content + text
+            
+        return receipt_content
 
 def get_receipt_object(normalized_img) -> Receipt:
     
@@ -33,7 +128,6 @@ def get_receipt_object(normalized_img) -> Receipt:
         document_line_parts = document_line.split('\t')
         
         if document_line_parts[11] != '':
-            
             height = int(document_line_parts[9])
             min_height = 10
             max_height = 40
@@ -47,51 +141,7 @@ def get_receipt_object(normalized_img) -> Receipt:
     #     print(b, ' : ', receipt.body[b])
     
     return receipt
-
-def analysis_receipt_object(receipt: Receipt):
-
-    # recipet.originLiens의 길이는 (N, 12)
-    
-    # [STEP 1] 박스들의 높이 평균값 계산
-    height_nparr = receipt.originLines[:, 9]
-    mean_height = np.nanmean(height_nparr.astype(np.float32), axis=0)
-
-    # [STEP 2] 개별 박스들의 중앙값 계산 (top + height / 2)
-    boundary = receipt.originLines[:, [7, 9]]
-    
-    median_of_boundary = boundary.astype(np.float32)[:, 0] + boundary.astype(np.float32)[:, 1] / 2
-    median_of_boundary = median_of_boundary.reshape(-1, 1)
-    
-    # [STEP 3] 개별 박스들의 그룹화
-    prev_median = 0
-    group_index = -1
-    
-    len_originLines = int(receipt.originLines.size / receipt.originLines[0].size)
-    group_index_np = np.zeros((int(len_originLines), 1), dtype=int)
-    for idx in range(len_originLines):
         
-        median = median_of_boundary[idx]
-        text = receipt.originLines[idx][11]
-        
-        median_gap = abs(median - prev_median)
-        prev_median = median
-        if median_gap > mean_height:
-            group_index = group_index + 1
-            group_index_np[idx] = group_index
-            # print(f'다른 그룹 {group_index}', median_gap, median, text)
-            
-        else:
-            group_index_np[idx] = group_index
-            # print(f'같은 그룹 {group_index}', median_gap, median, text)
-            
-    receipt.convertedLines = np.concatenate((receipt.originLines, group_index_np), axis=1)
-    
-            
-def get_receipt_string(normalized_img):
-    document: str = pytesseract.image_to_string(normalized_img, lang='kor')
-    
-    return document
-
 if __name__ == "__main__":
     from sys import argv
     from config import get_config
@@ -113,27 +163,9 @@ if __name__ == "__main__":
     
     # get_ImageBoxes(normalized_img)
     ReceiptObject = get_receipt_object(normalized_img)
-    analysis_receipt_object(ReceiptObject)
-    
-    
-    ReceiptString = '' # 유효성 검사된 문자열
-    OriginString = '' # 그냥 원본 문자열
-    prev_group = 0
-    for lines in ReceiptObject.convertedLines:
-        text = lines[11]
-        now_group = lines[12]
-        if prev_group != now_group:
-            ReceiptString = ReceiptString + '\n' + text
-            
-        else:
-            ReceiptString = ReceiptString + text
-        
-        prev_group = now_group
-    for lines in ReceiptObject.originLines:
-        text = lines[11]
-        OriginString = OriginString + text
-    print(ReceiptString)
-    print(OriginString)
+    ReceiptObject.classify_line()
+    receipt = ReceiptObject.get_receipt()
+    receipt2 = ReceiptObject.get_receipt_without_line()
     
     # [DRAWING]
     count = 0
@@ -144,14 +176,6 @@ if __name__ == "__main__":
         color = (0, single_color, 0)
         single_color = min(single_color + 1, 255)
         draw_rectangle(boxed_img, [int(l) for l in lines[6:10]], color)
-        
-        # [TEMP]
-        # count = count + 1
-        # temp_img = normalized_img.copy()
-        # draw_rectangle(temp_img, [int(l) for l in lines[6:10]], color)
-        # save_path = f'{base_path}/assets/receipt/{target_path}_drawed_{count}.png'
-        # is_saved = save_img(temp_img, save_path)
-        # print(is_saved)
     
     # # [OUTPUT]
     save_path = f'{base_path}/assets/receipt/{target_path}_oirigin.png'
