@@ -9,6 +9,7 @@ class OcrConfigModel():
         self.banned_keyword_list = config_data['banned_keyword_list']
         self.analysis_keyword_list = config_data['analysis_keyword_list']
 
+
 class ConfigProvider():
     
     def __init__(self):
@@ -17,6 +18,7 @@ class ConfigProvider():
         config_data = self.load_yaml('/config.yml')
         
         self.ocrConfig = OcrConfigModel(config_data)
+        self.api_key = config_data['api_key']
     
     def load_yaml(self, path):
         try: 
@@ -29,6 +31,8 @@ class ConfigProvider():
             
         except Exception as e:
             raise Exception('파일을 찾지 못했습니다.')
+
+configProvider = ConfigProvider()
         
 if __name__ == "__main__":
     from sys import argv
