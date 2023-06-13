@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["backend"]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -129,3 +128,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://example.com',
     'https://example.com',
 ]
+
+############################### CSRF 비활성화 (보안 위험)
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SAMESITE = None
