@@ -1,8 +1,8 @@
-from django.contrib import admin
-from django.urls import path
-
-from .basic_view import BasicView
+from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', BasicView.as_view(), name='url-name'),
+    path('status/', include('src.routes.status.status_router')),
+    path('alarm/', include('src.routes.alarm.alarm_router')),
+    path('device/', include('src.routes.device.device_router')),
+    path('ingredients/', include('src.routes.ingredients.ingredients_router')),
 ]
