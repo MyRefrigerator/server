@@ -2,9 +2,11 @@ import os
 import yaml
 # from decouple import config
 
-class OcrConfigModel():
+class OcrConfigEnv():
     
     def __init__(self, config_data: dict):
+        
+        print('OcrConfigEnv is created')
         
         self.banned_keyword_list = config_data['banned_keyword_list']
         self.analysis_keyword_list = config_data['analysis_keyword_list']
@@ -13,14 +15,15 @@ class OcrConfigModel():
 class ConfigProvider():
     
     def __init__(self):
-        print('ConfigModel is created')
+        print('ConfigProvider is created')
         
-        config_data = self.load_yaml('/config.yml')
+        config_data = self._load_yaml('/config.yml')
         
-        self.ocrConfig = OcrConfigModel(config_data)
-        self.api_key = config_data['api_key']
+        self.ocrConfig = OcrConfigEnv(config_data)
+        self.api_key = config_data['api_key']    
     
-    def load_yaml(self, path):
+    
+    def _load_yaml(self, path):
         try: 
             abs_path = os.getcwd()
             with open(abs_path + path) as stream:
@@ -31,6 +34,8 @@ class ConfigProvider():
             
         except Exception as e:
             raise Exception('파일을 찾지 못했습니다.')
+
+
 
 configProvider = ConfigProvider()
         
