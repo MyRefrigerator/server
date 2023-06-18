@@ -1,6 +1,12 @@
 from django.views import View
 from django.http import HttpResponse, JsonResponse
+
+# Models
+from src.models.enums.e_status_code import EStatusCode
+
+# Modules
 from src.modules.config_provider import configProvider
+
 
 class BaseController(View):
     
@@ -29,6 +35,11 @@ class BaseController(View):
         
     def _getJsonResponse(
         self,
-        params: dict
+        params: dict,
+        statusCode: EStatusCode = EStatusCode.CREATED
     ):
-        return JsonResponse(params, json_dumps_params={ 'ensure_ascii': False })
+        return JsonResponse(
+            params,
+            status = statusCode.value,
+            json_dumps_params={ 'ensure_ascii': False }
+        )
