@@ -50,6 +50,8 @@ pip install python-decouple
 pip install django-cors-headers
 pip install djangorestframework [Remove!]
 pip install pydantic
+pip install psycopg2 [Failure]
+pip install psycopg2-binary [Success, instead of psyconpg2]
 ```
 
 ## Get Started(Ubuntu Only)

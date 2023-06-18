@@ -11,6 +11,18 @@ class OcrConfigEnv():
         self.banned_keyword_list = config_data['banned_keyword_list']
         self.analysis_keyword_list = config_data['analysis_keyword_list']
 
+class RdsConfigEnv():
+    
+    def __init__(self, config_data: dict):
+        
+        print('RdsConfigEnv is created')
+        
+        self.ENGINE = config_data['RDS_CONFIG']['ENGINE']
+        self.HOST = config_data['RDS_CONFIG']['HOST']
+        self.PORT = config_data['RDS_CONFIG']['PORT']
+        self.USER = config_data['RDS_CONFIG']['USER']
+        self.PASSWORD = config_data['RDS_CONFIG']['PASSWORD']
+        self.DATABASE_NAME = config_data['RDS_CONFIG']['DATABASE_NAME']
 
 class ConfigProvider():
     
@@ -20,6 +32,7 @@ class ConfigProvider():
         config_data = self._load_yaml('/config.yml')
         
         self.ocrConfig = OcrConfigEnv(config_data)
+        self.rdsConfig = RdsConfigEnv(config_data)
         self.api_key = config_data['api_key']    
     
     
