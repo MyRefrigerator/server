@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 class DeviceRegistrationController(BaseController):
     
     def post(self, request):
-        
+
         return self._getJsonResponse({
             'isSuccess': True
         })
