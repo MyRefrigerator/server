@@ -52,6 +52,9 @@ pip install djangorestframework [Remove!]
 pip install pydantic
 pip install psycopg2 [Failure]
 pip install psycopg2-binary [Success, instead of psyconpg2]
+
+apt install libmysqlclient-dev [Dependency for mysqlclient]
+pip install mysqlclient
 ```
 
 ## Get Started(Ubuntu Only)
