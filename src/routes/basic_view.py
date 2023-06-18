@@ -6,12 +6,12 @@ from django.utils.decorators import method_decorator
 
 from .template_view import TemplateView
 from ..modules.receipt.receipt_provider import ReceiptProvider
+from ..modules.factory.dto_factory import DtoFactory
 
 # Computer Vision
 import cv2
 import numpy as np
-
-
+from ..models.dtos.sample_dto import UserDto
 
 @method_decorator(csrf_exempt, name='dispatch')
 class BasicView(TemplateView):
@@ -22,6 +22,15 @@ class BasicView(TemplateView):
         
     # @csrf_exempt # NOT WORKING
     def get(self, request):
+        
+        user = DtoFactory().getDto(
+            UserDto,
+            {
+                # 'id': 13,
+                'signup_ts': '2017-06-01 12:22',
+                'friends': [1, '2', b'3']
+            }
+        )
         
         # GET 요청 처리
         # print(self.configProvider.ocrConfig.analysis_keyword_list)
