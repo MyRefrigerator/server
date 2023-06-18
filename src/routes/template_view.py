@@ -1,6 +1,8 @@
 from django.views import View
 from django.http import HttpResponse, JsonResponse
-from src.modules.config_provider import configProvider
+
+# Modules
+from src.modules.provider.config_provider import configProvider
 
 class TemplateView(View):
     

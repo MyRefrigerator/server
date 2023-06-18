@@ -1,5 +1,7 @@
 from django.http import HttpResponseForbidden
-from ...modules.config_provider import configProvider
+
+# Modules
+from src.modules.provider.config_provider import configProvider
 
 class APIKeyMiddleware:
     

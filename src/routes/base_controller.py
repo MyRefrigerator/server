@@ -5,8 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from src.models.enums.e_status_code import EStatusCode
 
 # Modules
-from src.modules.config_provider import configProvider
-
+from src.modules.provider.config_provider import configProvider
 
 class BaseController(View):
     
