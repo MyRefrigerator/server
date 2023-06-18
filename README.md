@@ -48,7 +48,8 @@ pip install orig
 
 pip install python-decouple
 pip install django-cors-headers
-pip install djangorestframework
+pip install djangorestframework [Remove!]
+pip install pydantic
 ```
 
 ## Get Started(Ubuntu Only)

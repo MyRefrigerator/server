@@ -11,6 +11,8 @@ from ..modules.receipt.receipt_provider import ReceiptProvider
 import cv2
 import numpy as np
 
+
+
 @method_decorator(csrf_exempt, name='dispatch')
 class BasicView(TemplateView):
     
