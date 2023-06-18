@@ -79,14 +79,7 @@ WSGI_APPLICATION = 'src.config.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': configProvider.rdsConfig.ENGINE, 
-        'HOST': configProvider.rdsConfig.HOST, 
-        'PORT': configProvider.rdsConfig.PORT, 
-        'USER': configProvider.rdsConfig.USER, 
-        'PASSWORD': configProvider.rdsConfig.PASSWORD, 
-        'NAME': configProvider.rdsConfig.DATABASE_NAME 
-    }
+    'default': {}
 }
 
 # Password validation
