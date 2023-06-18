@@ -26,7 +26,7 @@ class BasicView(TemplateView):
         user = DtoFactory().getDto(
             UserDto,
             {
-                # 'id': 13,
+                'id': 13,
                 'signup_ts': '2017-06-01 12:22',
                 'friends': [1, '2', b'3']
             }
@@ -34,7 +34,9 @@ class BasicView(TemplateView):
         
         # GET 요청 처리
         # print(self.configProvider.ocrConfig.analysis_keyword_list)
-        return HttpResponse('Hello World')
+        return self._getJsonResponse({
+            'isSuccess': True
+        })
     
     # @csrf_exempt # NOT WORKING
     def post(self, request):
@@ -47,8 +49,7 @@ class BasicView(TemplateView):
         receipt = self.receiptProvider.get_receipt(file.read())
         this.receiptDetector.getReceipt(imageBuffer)
 
-        response = JsonResponse({
+        return self._getJsonResponse({
             'isSuccess': True,
             'receipt': receipt.originLines
-        }, json_dumps_params={ 'ensure_ascii': False })
-        return response
+        })

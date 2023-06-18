@@ -1,5 +1,5 @@
 from django.views import View
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from src.modules.config_provider import configProvider
 
 class TemplateView(View):
@@ -26,3 +26,9 @@ class TemplateView(View):
         
         except Exception as e:
             return None
+        
+    def _getJsonResponse(
+        self,
+        params: dict
+    ):
+        return JsonResponse(params, json_dumps_params={ 'ensure_ascii': False })
