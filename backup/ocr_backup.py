@@ -14,7 +14,6 @@ class Receipt():
         self.bodyKeys = []
         self.body = {}
         self.originLines = []
-        sel;f
         
     def add_line(self, line: list):
         # print(

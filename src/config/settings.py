@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders', # CORS
+    'rest_framework', #Django Rest Framework
 ]
 
 MIDDLEWARE = [

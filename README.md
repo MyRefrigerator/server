@@ -45,6 +45,10 @@ pip install pytesseract
 pip install imutils
 pip install scipy
 pip install orig
+
+pip install python-decouple
+pip install django-cors-headers
+pip install djangorestframework
 ```
 
 ## Get Started(Ubuntu Only)

@@ -14,7 +14,7 @@ class TemplateView(View):
     ):
         file = self.get_chunked_file(Files, KEY)
         
-        return file if file.name.endswith('.png') else None
+        return file if file.name.endswith('.png') or file.name.endswith('.jpg') else None
     
     def get_chunked_file(
         self,

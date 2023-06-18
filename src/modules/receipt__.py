@@ -1,4 +1,4 @@
-from detect import ReceiptDetector
+from .detect import ReceiptDetector
 from typing import List
 
 import numpy as np
