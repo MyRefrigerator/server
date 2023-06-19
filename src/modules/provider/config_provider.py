@@ -24,6 +24,15 @@ class RdsConfigEnv():
         self.PASSWORD = config_data['RDS_CONFIG']['PASSWORD']
         self.DATABASE_NAME = config_data['RDS_CONFIG']['DATABASE_NAME']
 
+class JwtConfigEnv():
+
+    def __init__(self, config_data: dict):
+        
+        print('JwtConfigEnv is created')
+        
+        self.SECRET_KEY = config_data['JWT_CONFIG']['SECRET_KEY']
+        self.ALGORITHM = config_data['JWT_CONFIG']['ALGORITHM']
+
 class ConfigProvider():
     
     def __init__(self):
@@ -33,6 +42,7 @@ class ConfigProvider():
         
         self.ocrConfig = OcrConfigEnv(config_data)
         self.rdsConfig = RdsConfigEnv(config_data)
+        self.jwtConfing = JwtConfigEnv(config_data)
         self.api_key = config_data['api_key']    
     
     
