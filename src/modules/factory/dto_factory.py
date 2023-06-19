@@ -6,7 +6,7 @@ from json import dumps
 
 class DtoFactory():
     
-    def getDto(self, className, paramDict):
+    def getDtoInstance(self, className, paramDict):
         try:
             
             return className(**paramDict)
