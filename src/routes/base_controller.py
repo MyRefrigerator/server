@@ -1,5 +1,6 @@
 from django.views import View
 from django.http import HttpResponse, JsonResponse
+from json import loads
 
 # Models
 from src.models.enums.e_status_code import EStatusCode
@@ -31,6 +32,21 @@ class BaseController(View):
         
         except Exception as e:
             return None
+        
+    def _getRequestBody(
+        self,
+        bodyBytes: bytes
+    ) -> dict:
+        
+        try:
+            
+            bodyStr = bodyBytes.decode('utf-8')
+            bodyDict = loads(bodyStr)
+            
+            return bodyDict
+        
+        except Exception as e:
+            return {}
         
     def _getJsonResponse(
         self,

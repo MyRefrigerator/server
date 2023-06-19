@@ -2,35 +2,29 @@ from ..base_controller import BaseController
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
-from src.modules.provider.rds_provider import RdsProvider
+# Layer
+from src.routes.device.device_service import DeviceService
+
+# Modules
+from src.modules.factory.dto_factory import DtoFactory
+
+# Models
+from src.models.dtos.device.post_device_registration_dto import PostDeviceRegistrationDto
+from src.models.dtos.device.patch_device_registration_dto import PatchDeviceRegistrationDto
 
 @method_decorator(csrf_exempt, name='dispatch')
 class DeviceRegistrationController(BaseController):
     
     def __init__(self):
-        self.rdsProvider = RdsProvider()
+        # self.rdsProvider = RdsProvider()
+        self.dtoFactory = DtoFactory()
+        self.deviceService = DeviceService()
     
     def post(self, request):
         
-        conn = self.rdsProvider.get_connection()
-        conn_cursor = conn.cursor()
-        conn_rows = conn_cursor.execute('''INSERT INTO device (
-            deviceUniqueKey,
-            deviceOsSystem,
-            deviceOsVersion
-        ) VALUES (
-            '야옹1',
-            '으앙',
-            '으앙'
-        )''')
-        conn.commit()
-        
-        conn_cursor.execute('SELECT * FROM device')
-        conn_rows = conn_cursor.fetchall()
-
-        print(conn_rows)
-        
-        conn.close()
+        bodyDict = self._getRequestBody(request.body)
+        targetDto = self.dtoFactory.getDtoInstance(PostDeviceRegistrationDto, bodyDict)
+        self.deviceService.postDeviceRegistration(targetDto)
         
         return self._getJsonResponse({
             'isSuccess': True
@@ -38,6 +32,11 @@ class DeviceRegistrationController(BaseController):
         
     def patch(self, request):
         
+        bodyDict = self._getRequestBody(request.body)
+        targetDto = self.dtoFactory.getDtoInstance(PatchDeviceRegistrationDto, bodyDict)
+        deviceToken = self.deviceService.patchDeviceRegistration(targetDto)
+                
         return self._getJsonResponse({
-            'isSuccess': True
+            'isSuccess': True,
+            'deviceToken': deviceToken
         })

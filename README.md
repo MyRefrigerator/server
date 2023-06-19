@@ -55,6 +55,8 @@ pip install psycopg2-binary [Success, instead of psyconpg2]
 
 apt install libmysqlclient-dev [Dependency for mysqlclient]
 pip install mysqlclient
+pip install PyMySQL
+pip install PyJWT
 ```
 
 ## Get Started(Ubuntu Only)
