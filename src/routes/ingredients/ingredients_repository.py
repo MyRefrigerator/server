@@ -66,6 +66,36 @@ class IngredientsRepository(BaseService):
         
         else:
             return result
+         
+    def selectExpiredIngredientRow(
+        self,
+        cursor: MySQLCursor,
+        deviceUniqueKey: str,
+        nowUtcStr: str
+    ) -> dict or None:
+        
+        # ingredientUuidStr = '(' + ', '.join(f"'{ingredientuuid}'" for ingredientuuid in ingredientUuidSet) + ')'
+        query = f'''
+            SELECT
+                ingredient_uuid as ingredientUuid,
+                name,
+                count,
+                created_date as createdDate,
+                expired_date as expiredDate,
+                first_category as category
+            FROM ingredient
+            WHERE   device_unique_key   =   %s
+            AND     expired_date        <   '{nowUtcStr}';
+        '''
+        
+        cursor.execute(query, ( deviceUniqueKey, ))
+        
+        result = cursor.fetchall()
+        if len(result) == 0:
+            return []
+        
+        else:
+            return result
         
     def selectIngredientRow(
         self,
