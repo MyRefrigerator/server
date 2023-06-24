@@ -2,10 +2,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
 # Layer
+from ..base_controller import BaseController
 from src.routes.ingredients.ingredients_service import IngredientsService
 
 # Modules
-from ..base_controller import BaseController
 from src.modules.factory.dto_factory import DtoFactory
 
 # Models

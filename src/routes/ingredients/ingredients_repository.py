@@ -14,7 +14,29 @@ class IngredientsRepository(BaseService):
     def __init__(self):
         super().__init__()
     
-    def insertIngredientsRow(
+    def selectIngredientRows(
+        self,
+        cursor: MySQLCursor,
+        deviceUniqueKey: str
+    ) -> None:
+        
+        query = '''
+            SELECT
+                ingredient_uuid as ingredientUuid,
+                name,
+                count,
+                created_date as createdDate,
+                expired_date as expiredDate,
+                first_category as category
+            FROM ingredient
+            WHERE device_unique_key = %s;
+        '''
+        cursor.execute(query, ( deviceUniqueKey, ))
+        
+        result = cursor.fetchall()
+        return result
+        
+    def insertIngredientRows(
         self,
         cursor: MySQLCursor,
         deviceUniqueKey: str,

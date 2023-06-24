@@ -18,12 +18,22 @@ class IngredientsService(BaseService):
         
         self.ingredientsRepository = IngredientsRepository()
         
+    def getIngredientList(self):
+        print('getIngredientList')
+        
+        with self.rdsProvider.get_auto_connection() as conn:
+            
+            cursor = conn.cursor(dictionary=True)
+            ingredientList = self.ingredientsRepository.selectIngredientRows(cursor, 'sample')
+            
+            return ingredientList
+    
     def postIngredientManualInput(self, dto: PostIngredientManualInputDto):
         print('postDeviceRegistration', dto)
         
         with self.rdsProvider.get_auto_connection() as conn:
             
             cursor = conn.cursor(dictionary=True)
-            self.ingredientsRepository.insertIngredientsRow(cursor, 'sample', [dto])
+            self.ingredientsRepository.insertIngredientRows(cursor, 'sample', [dto])
             
             conn.commit()
