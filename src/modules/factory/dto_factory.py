@@ -1,8 +1,10 @@
 
 from ...models.dtos.sample_dto import UserDto
-from ...models.exception.custom_exception import CustomException
-from pydantic.error_wrappers import ValidationError
 from json import dumps
+from pydantic.error_wrappers import ValidationError
+
+# Models
+from ...models.exception.custom_exception import CustomException
 
 class DtoFactory():
     
@@ -12,6 +14,8 @@ class DtoFactory():
             return className(**paramDict)
         
         except ValidationError as exception:
+            # print('ValidationError : ', exception)
+            
             errorMessage =[]
             for e in exception.errors():
                 
@@ -21,3 +25,6 @@ class DtoFactory():
                     errorMessage.append(f'{e["loc"]} {e["msg"]} ({e["type"]})')
             
             raise CustomException(dumps(errorMessage))
+        
+        # except Exception as e:
+        #     print('Exception : ', e)
