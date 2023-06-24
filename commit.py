@@ -27,7 +27,7 @@ def fix_name_email(line):
     if not match:
         return line
 
-    old_name old_email = match.group(2), match.group(3)
+    old_name, old_email = match.group(2), match.group(3)
     new = fixup(old_name, old_email)
     if not new:
         return line
