@@ -38,7 +38,7 @@ class ConfigProvider():
     def __init__(self):
         print('ConfigProvider is created')
         
-        config_data = self._load_yaml('/config.yml')
+        config_data = self._load_yaml('config.yml')
         
         self.ocrConfig = OcrConfigEnv(config_data)
         self.rdsConfig = RdsConfigEnv(config_data)
@@ -49,15 +49,16 @@ class ConfigProvider():
     def _load_yaml(self, path):
         try: 
             abs_path = os.getcwd()
-            with open(abs_path + path) as stream:
+            
+            with open(os.path.join(abs_path, path), encoding='utf-8') as stream:
                 return yaml.safe_load(stream)
                 
         except yaml.YAMLError as yaml_e:
             raise Exception('잘못된 형식의 YAML 입니다.')
             
         except Exception as e:
+            print(e)
             raise Exception('파일을 찾지 못했습니다.')
-
 
 
 configProvider = ConfigProvider()
