@@ -72,7 +72,7 @@ class SpecificIngredientsController(BaseController):
         try:
             
             targetDto = self.dtoFactory.getDtoInstance(BaseIngredientUuidDto, { 'ingredientUuid': ingredientUuid })
-            ingredient = self.ingredientsService.putIngrediedelIngredientnt(targetDto)
+            ingredient = self.ingredientsService.delIngredient(targetDto)
             
             return self._getJsonResponse({
                 'isSuccess': True,

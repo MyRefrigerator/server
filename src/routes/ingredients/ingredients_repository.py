@@ -37,7 +37,36 @@ class IngredientsRepository(BaseService):
         result = cursor.fetchall()
         return result
     
-    
+    def selectIngredientRowByOptions(
+        self,
+        cursor: MySQLCursor,
+        deviceUniqueKey: str,
+        ingredientUuidSet: set
+    ) -> dict or None:
+        
+        ingredientUuidStr = '(' + ', '.join(f"'{ingredientuuid}'" for ingredientuuid in ingredientUuidSet) + ')'
+        query = f'''
+            SELECT
+                ingredient_uuid as ingredientUuid,
+                name,
+                count,
+                created_date as createdDate,
+                expired_date as expiredDate,
+                first_category as category
+            FROM ingredient
+            WHERE   device_unique_key   =   %s
+            AND     ingredient_uuid     IN  {ingredientUuidStr};
+        '''
+        
+        cursor.execute(query, ( deviceUniqueKey, ))
+        
+        result = cursor.fetchall()
+        if len(result) == 0:
+            return []
+        
+        else:
+            return result
+        
     def selectIngredientRow(
         self,
         cursor: MySQLCursor,
@@ -141,3 +170,20 @@ class IngredientsRepository(BaseService):
             devcieUniqueKey,
             ingredientUuid,
         ))
+        
+    def deleteIngredientRowByOptions(
+        self,
+        cursor: MySQLCursor,
+        deviceUniqueKey: str,
+        ingredientUuidSet: set
+    ) -> None:
+        
+        ingredientUuidStr = '(' + ', '.join(f"'{ingredientuuid}'" for ingredientuuid in ingredientUuidSet) + ')'
+        query = f'''
+            DELETE
+            FROM ingredient
+            WHERE   device_unique_key   =   %s
+            AND     ingredient_uuid     IN  {ingredientUuidStr};
+        '''
+        
+        cursor.execute(query, ( deviceUniqueKey, ))
