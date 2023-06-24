@@ -35,6 +35,35 @@ class IngredientsRepository(BaseService):
         
         result = cursor.fetchall()
         return result
+    
+    
+    def selectIngredientRow(
+        self,
+        cursor: MySQLCursor,
+        deviceUniqueKey: str,
+        ingredientUuid: str
+    ) -> dict or None:
+        
+        query = '''
+            SELECT
+                ingredient_uuid as ingredientUuid,
+                name,
+                count,
+                created_date as createdDate,
+                expired_date as expiredDate,
+                first_category as category
+            FROM ingredient
+            WHERE   device_unique_key = %s
+            AND     ingredient_uuid = %s;
+        '''
+        cursor.execute(query, ( deviceUniqueKey, ingredientUuid, ))
+        
+        result = cursor.fetchall()
+        if len(result) == 1:
+            return result[0]
+        
+        else:
+            return None
         
     def insertIngredientRows(
         self,
