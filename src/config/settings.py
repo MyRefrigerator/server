@@ -128,3 +128,6 @@ CORS_ALLOWED_ORIGINS = configProvider.djangoConfig.ALLOWED_CORS_ORIGIN
 ############################### CSRF 비활성화 (보안 위험)
 CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_SAMESITE = None
+
+############################## APPEND REDIRECT 비활성화
+APPEND_SLASH = False
