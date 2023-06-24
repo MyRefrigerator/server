@@ -21,12 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-k9bk3%pm5m&lfq6-_k6r^f7%2@0u#!usa8unu8+g+fm*t3%uio'
+SECRET_KEY = configProvider.djangoConfig.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["backend"]
+
+ALLOWED_HOSTS = configProvider.djangoConfig.ALLOWED_HOST
 
 # Application definition
 
@@ -122,10 +123,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = [
-    'http://example.com',
-    'https://example.com',
-]
+CORS_ALLOWED_ORIGINS = configProvider.djangoConfig.ALLOWED_CORS_ORIGIN
 
 ############################### CSRF 비활성화 (보안 위험)
 CSRF_COOKIE_SECURE = False

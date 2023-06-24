@@ -2,14 +2,24 @@ import os
 import yaml
 # from decouple import config
 
+class DjangoConfig():
+    
+    def __init__(self, config_data: dict):
+        
+        print('OcrConfigEnv is created')
+        
+        self.SECRET_KEY: str = config_data['DJANGO_CONFIG']['SECRET_KEY']
+        self.ALLOWED_HOST: list = config_data['DJANGO_CONFIG']['ALLOWED_HOST']
+        self.ALLOWED_CORS_ORIGIN: list = config_data['DJANGO_CONFIG']['ALLOWED_CORS_ORIGIN']
+        
 class OcrConfigEnv():
     
     def __init__(self, config_data: dict):
         
         print('OcrConfigEnv is created')
         
-        self.banned_keyword_list = config_data['banned_keyword_list']
-        self.analysis_keyword_list = config_data['analysis_keyword_list']
+        self.banned_keyword_list: list = config_data['banned_keyword_list']
+        self.analysis_keyword_list: list = config_data['analysis_keyword_list']
 
 class RdsConfigEnv():
     
@@ -36,6 +46,7 @@ class JwtConfigEnv():
 class ConfigProvider():
     
     def __init__(self):
+        
         print('ConfigProvider is created')
         
         config_data = self._load_yaml('config.yml')
@@ -43,6 +54,7 @@ class ConfigProvider():
         self.ocrConfig = OcrConfigEnv(config_data)
         self.rdsConfig = RdsConfigEnv(config_data)
         self.jwtConfing = JwtConfigEnv(config_data)
+        self.djangoConfig = DjangoConfig(config_data)
         self.api_key = config_data['api_key']    
     
     
