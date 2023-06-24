@@ -11,8 +11,9 @@ from src.modules.provider.uuid_provider import UuidProvider
 
 # Models
 from src.models.exception.custom_exception import CustomException
-from src.models.dtos.ingredient.post_ingredient_manual_input_dto import PostIngredientManualInputDto
+from src.models.dtos.ingredient.put_ingredient_dto import PutIngredientDto
 from src.models.dtos.ingredient.base_ingredient_uuid_dto import BaseIngredientUuidDto
+from src.models.dtos.ingredient.post_ingredient_manual_input_dto import PostIngredientManualInputDto
 
 class IngredientsService(BaseService):
     
@@ -58,3 +59,28 @@ class IngredientsService(BaseService):
             self.ingredientsRepository.insertIngredientRows(cursor, 'sample', [dto])
             
             conn.commit()
+    
+    def putIngredient(self, dto: PutIngredientDto):
+        print('postDeviceRegistration', dto)
+        
+        with self.rdsProvider.get_auto_connection() as conn:
+            
+            cursor = conn.cursor(dictionary=True)
+            ingredient = self.ingredientsRepository.selectIngredientRow(cursor, 'sample', dto.ingredientUuid)
+            if ingredient == None:
+                raise CustomException(dumps([
+                    'ingredient is not exsists more'
+                ]))
+            
+            self.ingredientsRepository.updateIngredientRow(cursor, 'sample', dto)
+            
+            conn.commit()
+            
+            return {
+                'ingredientUuid': ingredient['ingredientUuid'],
+                'name': ingredient['name'],
+                'count': dto.count,
+                'category': ingredient['category'],
+                'expiredDate': ingredient['expiredDate'],
+                'createdDate': ingredient['createdDate']
+            }

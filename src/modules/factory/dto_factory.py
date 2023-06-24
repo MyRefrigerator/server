@@ -20,9 +20,10 @@ class DtoFactory():
             for e in exception.errors():
                 
                 if len(e['loc']) == 1:
-                    errorMessage.append(f'{e["loc"][0]} {e["msg"]} ({e["type"]})')
+                    errorMessage.append(f'key "{e["loc"][0]}" {e["msg"]} ({e["type"]})')
+                    
                 else:
-                    errorMessage.append(f'{e["loc"]} {e["msg"]} ({e["type"]})')
+                    errorMessage.append(f'keys "{e["loc"]}" {e["msg"]} ({e["type"]})')
             
             raise CustomException(dumps(errorMessage))
         

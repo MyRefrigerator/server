@@ -7,6 +7,7 @@ from mysql.connector.cursor import MySQLCursor
 from src.routes.base_service import BaseService
 
 # Models
+from src.models.dtos.ingredient.put_ingredient_dto import PutIngredientDto
 from src.models.dtos.ingredient.post_ingredient_manual_input_dto import PostIngredientManualInputDto
 
 class IngredientsRepository(BaseService):
@@ -64,7 +65,9 @@ class IngredientsRepository(BaseService):
         
         else:
             return None
-        
+    
+    # INSERT
+    
     def insertIngredientRows(
         self,
         cursor: MySQLCursor,
@@ -95,3 +98,25 @@ class IngredientsRepository(BaseService):
         query = query.rstrip(',') + ';'
         
         cursor.execute(query)
+        
+    # PUT
+    
+    def updateIngredientRow(
+        self,
+        cursor: MySQLCursor,
+        deviceUniqueKey: str,
+        dto: PutIngredientDto
+    ) -> None:
+        
+        query = '''
+            UPDATE  ingredient
+            SET     count = %s
+            WHERE   device_unique_key = %s
+            AND     ingredient_uuid = %s;
+        '''
+        
+        cursor.execute(query, (
+            dto.count,
+            deviceUniqueKey,
+            dto.ingredientUuid,
+        ))

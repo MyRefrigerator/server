@@ -11,6 +11,7 @@ from src.modules.factory.dto_factory import DtoFactory
 
 # Models
 from src.models.dtos.ingredient.base_ingredient_uuid_dto import BaseIngredientUuidDto
+from src.models.dtos.ingredient.put_ingredient_dto import PutIngredientDto  
 
 @method_decorator(csrf_exempt, name='dispatch')
 class SpecificIngredientsController(BaseController):
@@ -28,6 +29,30 @@ class SpecificIngredientsController(BaseController):
             targetDto = self.dtoFactory.getDtoInstance(BaseIngredientUuidDto, { 'ingredientUuid': ingredientUuid })
             
             ingredient = self.ingredientsService.getIngredient(targetDto)
+            
+            return self._getJsonResponse({
+                'isSuccess': True,
+                'ingredient': ingredient
+            })
+            
+        except Exception as e:
+            
+            print('Exception : ', e)
+            
+            return self._getJsonResponse({
+                'isSuccess': False
+            })
+            
+    def put(self, request, ingredientUuid=None):
+        
+        try:
+            
+            bodyDict = self._getRequestBody(request.body)
+            targetDto = self.dtoFactory.getDtoInstance(PutIngredientDto, {
+                'ingredientUuid': ingredientUuid,
+                **bodyDict
+            })
+            ingredient = self.ingredientsService.putIngredient(targetDto)
             
             return self._getJsonResponse({
                 'isSuccess': True,
