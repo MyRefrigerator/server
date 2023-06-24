@@ -1,6 +1,9 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
+# Layer
+from src.routes.ingredients.ingredients_service import IngredientsService
+
 # Modules
 from ..base_controller import BaseController
 from src.modules.factory.dto_factory import DtoFactory
@@ -13,6 +16,7 @@ class IngredientsManualInputController(BaseController):
     
     def __init__(self):
         self.dtoFactory = DtoFactory()
+        self.ingredientsService = IngredientsService()
     
     def post(self, request):
         
@@ -20,7 +24,7 @@ class IngredientsManualInputController(BaseController):
             
             bodyDict = self._getRequestBody(request.body)
             targetDto = self.dtoFactory.getDtoInstance(PostIngredientManualInputDto, bodyDict)
-            print(targetDto)
+            self.ingredientsService.postIngredientManualInput(targetDto)
             
             return self._getJsonResponse({
                 'isSuccess': True

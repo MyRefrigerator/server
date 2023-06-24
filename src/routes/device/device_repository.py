@@ -13,7 +13,7 @@ class DeviceRepository():
         self,
         cursor: MySQLCursor,
         dto: PostDeviceRegistrationDto
-    ):
+    ) -> None:
 
         query = '''
             INSERT INTO device
@@ -21,13 +21,11 @@ class DeviceRepository():
             VALUES (%s, %s, %s);
         '''
         
-        result = cursor.execute(query, (
+        cursor.execute(query, (
             dto.deviceUniqueKey,
             dto.deviceOsSystem,
             dto.deviceOsVersion,
         ))
-        print(result)
-        print(type(result))
     
     def getDeviceRowByUniqueKey(
         self,

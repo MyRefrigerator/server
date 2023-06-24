@@ -3,8 +3,11 @@ from pydantic import BaseModel, constr, validator
 
 # Models
 from src.models.exception.custom_exception import CustomException
+from src.modules.provider.uuid_provider import UuidProvider
 
 class PostIngredientManualInputDto(BaseModel):
+    
+    ingredientUuid: str = UuidProvider().getIngredientUuid()
     
     name: constr(max_length=64)
     count: int
