@@ -66,3 +66,24 @@ class SpecificIngredientsController(BaseController):
             return self._getJsonResponse({
                 'isSuccess': False
             })
+            
+    def delete(self, request, ingredientUuid=None):
+        
+        try:
+            
+            targetDto = self.dtoFactory.getDtoInstance(BaseIngredientUuidDto, { 'ingredientUuid': ingredientUuid })
+            ingredient = self.ingredientsService.putIngrediedelIngredientnt(targetDto)
+            
+            return self._getJsonResponse({
+                'isSuccess': True,
+                'ingredient': ingredient
+            })
+            
+        except Exception as e:
+            
+            print('Exception : ', e)
+            
+            return self._getJsonResponse({
+                'isSuccess': False
+            })
+        

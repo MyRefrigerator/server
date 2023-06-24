@@ -73,7 +73,31 @@ class IngredientsService(BaseService):
                 ]))
             
             self.ingredientsRepository.updateIngredientRow(cursor, 'sample', dto)
+            conn.commit()
             
+            return {
+                'ingredientUuid': ingredient['ingredientUuid'],
+                'name': ingredient['name'],
+                'count': dto.count,
+                'category': ingredient['category'],
+                'expiredDate': ingredient['expiredDate'],
+                'createdDate': ingredient['createdDate']
+            }
+            
+    def delIngredient(self, dto: BaseIngredientUuidDto):
+        
+        print('delIngredient', dto)
+                
+        with self.rdsProvider.get_auto_connection() as conn:
+            
+            cursor = conn.cursor(dictionary=True)
+            ingredient = self.ingredientsRepository.selectIngredientRow(cursor, 'sample', dto.ingredientUuid)
+            if ingredient == None:
+                raise CustomException(dumps([
+                    'ingredient is not exsists more'
+                ]))
+            
+            self.ingredientsRepository.deleteIngredientRow(cursor, 'sample', dto.ingredientUuid)
             conn.commit()
             
             return {

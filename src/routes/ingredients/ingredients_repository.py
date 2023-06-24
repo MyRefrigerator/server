@@ -120,3 +120,24 @@ class IngredientsRepository(BaseService):
             deviceUniqueKey,
             dto.ingredientUuid,
         ))
+        
+    # DEL
+    
+    def deleteIngredientRow(
+        self,
+        cursor: MySQLCursor,
+        devcieUniqueKey: str,
+        ingredientUuid: str
+    ) -> None:
+        
+        query = '''
+            DELETE
+            FROM    ingredient
+            WHERE   device_unique_key = %s
+            AND     ingredient_uuid = %s;
+        '''
+        
+        cursor.execute(query, (
+            devcieUniqueKey,
+            ingredientUuid,
+        ))
