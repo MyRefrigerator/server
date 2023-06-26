@@ -6,6 +6,9 @@ from django.utils.decorators import method_decorator
 from ..base_controller import BaseController
 from src.routes.ingredients.ingredients_service import IngredientsService
 
+# Middleware
+from src.common.middlewares.jwt_middleware import JwtMiddleware
+
 # Modules
 from ..base_controller import BaseController
 from src.modules.factory.dto_factory import DtoFactory
@@ -21,6 +24,7 @@ class IngredientsController(BaseController):
         self.dtoFactory = DtoFactory()
         self.ingredientsService = IngredientsService()
     
+    @method_decorator(JwtMiddleware)
     def get(self, request: HttpRequest):
         
         try:
@@ -40,7 +44,8 @@ class IngredientsController(BaseController):
             return self._getJsonResponse({
                 'isSuccess': False
             })
-            
+    
+    @method_decorator(JwtMiddleware)
     def delete(self, request: HttpRequest):
         
         try:

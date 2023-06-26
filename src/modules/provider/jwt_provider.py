@@ -22,11 +22,16 @@ class JwtProvider():
         },
             self.SECRET_KEY,
             self.ALGORITHM
-        ).decode('utf-8')
+        )
         
     def verify(self, token: str):
         
+        print('token : ', token)
+        print('verify : ', self.SECRET_KEY)
+        print('algorithm : ', self.ALGORITHM)
+        
         try:
+            
             
             result = jwt.decode(
                 token,
@@ -37,12 +42,16 @@ class JwtProvider():
             
             return result
         
-        except ExpiredSignatureError:
+        except ExpiredSignatureError as e:
+            print('ExpiredSignatureError : ', e)
             raise 'ExpiredSignatureError'
         
-        except InvalidTokenError:
+        except InvalidTokenError as e:
+            print('InvalidTokenError : ', e)
             raise 'InvalidTokenError'
         
+        except Exception as e:
+            print('Exception : ', e)
 
 if __name__ == '__main__':
     
