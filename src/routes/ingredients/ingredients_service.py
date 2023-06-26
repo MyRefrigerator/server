@@ -25,17 +25,17 @@ class IngredientsService(BaseService):
         
     # GET
         
-    def getIngredientList(self):
+    def getIngredientList(self, deviceUniqueKey: str):
         print('getIngredientList')
         
         with self.rdsProvider.get_auto_connection() as conn:
             
             cursor = conn.cursor(dictionary=True)
-            ingredientList = self.ingredientsRepository.selectIngredientRows(cursor, 'sample')
+            ingredientList = self.ingredientsRepository.selectIngredientRows(cursor, deviceUniqueKey)
             
             return ingredientList
         
-    def getIngredient(self, dto: BaseIngredientUuidDto):
+    def getIngredient(self, deviceUniqueKey: str, dto: BaseIngredientUuidDto):
         print('getIngredient : ', dto)
         
         with self.rdsProvider.get_auto_connection() as conn:
@@ -43,7 +43,7 @@ class IngredientsService(BaseService):
             cursor = conn.cursor(dictionary=True)
             ingredient = self.ingredientsRepository.selectIngredientRow(
                 cursor,
-                'sample',
+                deviceUniqueKey,
                 dto.ingredientUuid
             )
             if ingredient == None:
@@ -55,31 +55,31 @@ class IngredientsService(BaseService):
     
     # POST
     
-    def postIngredientManualInput(self, dto: PostIngredientManualInputDto):
+    def postIngredientManualInput(self, deviceUniqueKey: str, dto: PostIngredientManualInputDto):
         print('postDeviceRegistration', dto)
         
         with self.rdsProvider.get_auto_connection() as conn:
             
             cursor = conn.cursor(dictionary=True)
-            self.ingredientsRepository.insertIngredientRows(cursor, 'sample', [dto])
+            self.ingredientsRepository.insertIngredientRows(cursor, deviceUniqueKey, [dto])
             
             conn.commit()
     
     # PUT
     
-    def putIngredient(self, dto: PutIngredientDto):
+    def putIngredient(self, deviceUniqueKey: str, dto: PutIngredientDto):
         print('postDeviceRegistration', dto)
         
         with self.rdsProvider.get_auto_connection() as conn:
             
             cursor = conn.cursor(dictionary=True)
-            ingredient = self.ingredientsRepository.selectIngredientRow(cursor, 'sample', dto.ingredientUuid)
+            ingredient = self.ingredientsRepository.selectIngredientRow(cursor, deviceUniqueKey, dto.ingredientUuid)
             if ingredient == None:
                 raise CustomException(dumps([
                     'ingredient is not exsists more'
                 ]))
             
-            self.ingredientsRepository.updateIngredientRow(cursor, 'sample', dto)
+            self.ingredientsRepository.updateIngredientRow(cursor, deviceUniqueKey, dto)
             
             puttedIngredient = {
                 'ingredientUuid': ingredient['ingredientUuid'],
@@ -96,36 +96,36 @@ class IngredientsService(BaseService):
             
     # DEL
     
-    def delIngredientList(self, dto: BulkDelIngredientDto):
+    def delIngredientList(self, deviceUniqueKey: str, dto: BulkDelIngredientDto):
         
         print('delIngredientList', dto)
                 
         with self.rdsProvider.get_auto_connection() as conn:
             
             cursor = conn.cursor(dictionary=True)
-            ingredientList = self.ingredientsRepository.selectIngredientRowByOptions(cursor, 'sample', dto.ingredientUuidSet)
+            ingredientList = self.ingredientsRepository.selectIngredientRowByOptions(cursor, deviceUniqueKey, dto.ingredientUuidSet)
             if len(ingredientList) == 0:
                 return []
             
-            self.ingredientsRepository.deleteIngredientRowByOptions(cursor, 'sample', dto.ingredientUuidSet)
+            self.ingredientsRepository.deleteIngredientRowByOptions(cursor, deviceUniqueKey, dto.ingredientUuidSet)
             conn.commit()
             
             return ingredientList
             
-    def delIngredient(self, dto: BaseIngredientUuidDto):
+    def delIngredient(self, deviceUniqueKey: str, dto: BaseIngredientUuidDto):
         
         print('delIngredient : ', dto)
                 
         with self.rdsProvider.get_auto_connection() as conn:
             
             cursor = conn.cursor(dictionary=True)
-            ingredient = self.ingredientsRepository.selectIngredientRow(cursor, 'sample', dto.ingredientUuid)
+            ingredient = self.ingredientsRepository.selectIngredientRow(cursor, deviceUniqueKey, dto.ingredientUuid)
             if ingredient == None:
                 raise CustomException(dumps([
                     'ingredient is not exsists more'
                 ]))
             
-            self.ingredientsRepository.deleteIngredientRow(cursor, 'sample', dto.ingredientUuid)
+            self.ingredientsRepository.deleteIngredientRow(cursor, deviceUniqueKey, dto.ingredientUuid)
             
             deletedIngredient = {
                 'ingredientUuid': ingredient['ingredientUuid'],

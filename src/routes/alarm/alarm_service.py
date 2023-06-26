@@ -21,7 +21,8 @@ class AlarmService(BaseService):
         self.ingredientsRepository = IngredientsRepository()
         
     def getExpiredIngredientList(
-        self
+        self,
+        deviceUniqueKey: str
     ):
         print('getExpiredIngredientList')
         
@@ -32,6 +33,6 @@ class AlarmService(BaseService):
             nowUtcDatetime = datetime.utcnow()
             nowUtcStr = nowUtcDatetime.strftime("%y.%m.%d")
             
-            expiredIngredientList = self.ingredientsRepository.selectExpiredIngredientRow(cursor, 'sample', nowUtcStr)
+            expiredIngredientList = self.ingredientsRepository.selectExpiredIngredientRow(cursor, deviceUniqueKey, nowUtcStr)
             
             return expiredIngredientList

@@ -30,7 +30,8 @@ class IngredientsController(BaseController):
         try:
             
             bodyDict = self._getRequestBody(request.body)
-            ingredientList = self.ingredientsService.getIngredientList()
+            deviceUniqueKey = request.token['deviceUniqueKey']
+            ingredientList = self.ingredientsService.getIngredientList(deviceUniqueKey)
             
             return self._getJsonResponse({
                 'isSuccess': True,
@@ -50,13 +51,11 @@ class IngredientsController(BaseController):
         
         try:
             
-            print("set(request.GET.get('ingredientUuid').split(',') : ", set(request.GET.get('ingredientUuid').split(',')))
-            print("set(request.GET.get('ingredientUuid').split(',') : ", type(set(request.GET.get('ingredientUuid').split(','))))
-                  
+            deviceUniqueKey = request.token['deviceUniqueKey']
             targetDto = self.dtoFactory.getDtoInstance(BulkDelIngredientDto, {
                 'ingredientUuidSet': set(request.GET.get('ingredientUuid').split(','))
             })
-            ingredientList = self.ingredientsService.delIngredientList(targetDto)
+            ingredientList = self.ingredientsService.delIngredientList(deviceUniqueKey, targetDto)
             
             return self._getJsonResponse({
                 'isSuccess': True,

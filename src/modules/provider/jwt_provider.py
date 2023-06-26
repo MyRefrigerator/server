@@ -26,10 +26,6 @@ class JwtProvider():
         
     def verify(self, token: str):
         
-        print('token : ', token)
-        print('verify : ', self.SECRET_KEY)
-        print('algorithm : ', self.ALGORITHM)
-        
         try:
             
             
@@ -43,16 +39,14 @@ class JwtProvider():
             return result
         
         except ExpiredSignatureError as e:
-            print('ExpiredSignatureError : ', e)
             raise 'ExpiredSignatureError'
         
         except InvalidTokenError as e:
-            print('InvalidTokenError : ', e)
             raise 'InvalidTokenError'
         
         except Exception as e:
-            print('Exception : ', e)
-
+            pass
+        
 if __name__ == '__main__':
     
     payload = {'a': 'b'}

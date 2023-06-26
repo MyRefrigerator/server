@@ -8,6 +8,9 @@ from src.routes.alarm.alarm_service import AlarmService
 # Modules
 from src.modules.factory.dto_factory import DtoFactory
 
+# Middleware
+from src.common.middlewares.jwt_middleware import JwtMiddleware
+
 @method_decorator(csrf_exempt, name='dispatch')
 class ExpiredIngredientAlarmController(BaseController):
     
@@ -17,11 +20,14 @@ class ExpiredIngredientAlarmController(BaseController):
         self.dtoFactory = DtoFactory()
         self.alarmService = AlarmService()
     
+    @method_decorator(JwtMiddleware)
     def get(self, request):
         
         try:
             
-            expiredIngredientList = self.alarmService.getExpiredIngredientList()
+            deviceUniqueKey = request.token.deviceUniqueKey
+            expiredIngredientList = self.alarmService.getExpiredIngredientList(deviceUniqueKey)
+
             
             return self._getJsonResponse({
                 'isSuccess': True,

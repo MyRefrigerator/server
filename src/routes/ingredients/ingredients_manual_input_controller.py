@@ -5,6 +5,9 @@ from django.utils.decorators import method_decorator
 from ..base_controller import BaseController
 from src.routes.ingredients.ingredients_service import IngredientsService
 
+# Middleware
+from src.common.middlewares.jwt_middleware import JwtMiddleware
+
 # Modules
 from src.modules.factory.dto_factory import DtoFactory
 
@@ -18,13 +21,16 @@ class IngredientsManualInputController(BaseController):
         self.dtoFactory = DtoFactory()
         self.ingredientsService = IngredientsService()
     
+    @method_decorator(JwtMiddleware)
     def post(self, request):
         
         try:
             
             bodyDict = self._getRequestBody(request.body)
             targetDto = self.dtoFactory.getDtoInstance(PostIngredientManualInputDto, bodyDict)
-            self.ingredientsService.postIngredientManualInput(targetDto)
+            deviceUniqueKey = request.token['deviceUniqueKey']
+            
+            self.ingredientsService.postIngredientManualInput(deviceUniqueKey, targetDto)
             
             return self._getJsonResponse({
                 'isSuccess': True
