@@ -19,9 +19,32 @@
 
 ### Configs
 
-다음과 같은 
+다음과 같은 구조의 파일입니다.
 ```yaml
 path: "/home/ubuntu/server"
+
+banned_keyword_list: [ '고객', '결제', '카드', '승인', '가맹점', '전화', '번호', '사업', '할부', '개월' ]
+analysis_keyword_list: [ '메뉴', '단가', '수량', '금액' ]
+
+api_key: 'API KEY'
+
+DJANGO_CONFIG:
+  SECRET_KEY: 'DJANGO SCRET KEY'
+
+  ALLOWED_HOST: [ 'NGINX HOST NAME', '127.0.0.1' ]
+  ALLOWED_CORS_ORIGIN: [ 'http://example.com', 'https://example.com' ]
+
+RDS_CONFIG:
+  ENGINE: 'RDS ENGINE'
+  HOST: 'RDS ADDRESS'
+  PORT: 77777
+  USER: 'RDS HOST'
+  PASSWORD: 'RDS PWD'
+  DATABASE_NAME: 'RDS_NAME'
+
+JWT_CONFIG:
+  SECRET_KEY: 'JWT SECRET'
+  ALGORITHM: 'HS256'
 ```
 
 
