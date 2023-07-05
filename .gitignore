@@ -15,6 +15,9 @@ __pycache__
 *.html
 out.*
 
+# Virtual ENV
+venv/
+
 # Configuration
 config.json
 config.yaml

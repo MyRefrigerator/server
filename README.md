@@ -27,7 +27,46 @@ path: "/home/ubuntu/server"
 
 <br>
 
-### History
+### History[New]
+
+```cmd
+# [STEP 1] 가상환경 설정
+apt update -y
+apt install python3-venv
+python3 -m venv venv
+
+# [STEP 2] 가상환경 진입
+sourc venv/bin/activate
+
+# [STEP 3] APT 모듈 설치
+apt install libgl1-mesa-glx
+
+apt install tesseract-ocr
+apt install tesseract-ocr-eng
+apt install tesseract-ocr-kor
+apt install libmysqlclient-dev
+
+
+# [STEP 4] PIP 모듈 설치
+pip install opencv-python
+pip install matplotlib
+pip install pytesseract
+
+pip install imutils
+pip install scipy
+
+pip install python-decouple
+pip install django-cors-headers
+
+pip install pydantic
+
+pip install mysqlclient
+pip install PyMySQL
+pip install PyJWT
+pip install PyYaml
+```
+
+### History[Legacy]
 
 ```cmd
 conda create -n my-refrigerator -y
@@ -44,7 +83,7 @@ pip install pytesseract
 
 pip install imutils
 pip install scipy
-pip install orig
+pip install orig [NOne]
 
 pip install python-decouple
 pip install django-cors-headers
